@@ -1,3 +1,209 @@
+# 4/1
+
+### JSX로 마크업 작성하기
+
+1. 따옴표로 문자열을 전달하는 방법
+2. 중괄호를 이용해서 JavaScript 변수를 참조하는 방법
+3. 중괄호를 이용해서 JavaScript 함수를 호출하는 방법
+4. 중괄호를 이용해서 JavaScript 객체를 적용하는 방법
+
+- 
+~~~jsx
+import NamedComponentTest from './components/NamedComponentTest'
+import Gallery from './components/Profile'
+import UseJsx from './components/UseJsx'
+
+export default function App() {
+  return (
+    <>
+      {/* <NamedComponentTest/>
+      <Gallery /> */}
+      <UseJsx />  
+    </>
+  )
+}
+~~~
+
+### 함수 사용 요일 추가
+
+~~~jsx
+export default function UseJsx() {
+    const name = 'React'
+
+    function foramtDate(date) {
+        return new Intl.DateTimeFormat(
+            "en-US", 
+            { weekdate: "long" },
+        ).format(date)
+    }
+    return (
+        <>
+            <h1>Hello, {name}</h1>
+            <p>Today is {foramtDate(new Date())}</p>
+        </>
+    )
+}
+~~~
+
+### Props의 데이터 전달
+- React에선, props를 통해 JSX 태그에 정보를 전달 -> 예를 들어,
+src, alt, width, height의 속성값을 <img> 태그에 전달할 수 있음
+
+- <img> 태그에 전달할 수 있는 props는 HTML 표준으로 이미 정의되어 있음
+
+### 컴포넌트에 props 전달하기
+- 부모 컴포넌트 (Parent Component)
+    - 자식 컴포넌트를 자신의 구조 안에 포함(import 및 호출)하고, 데이터를 전달(props)하는 컴포넌트
+- 자식 컴포넌트 (Child Component)
+    - 부모 컴포넌트로 부터 전달받은 props를 통해 구체적인 UI를 만들어서 부모 컴포넌트에 다시 반환함
+    - 독립적으로 재사용될 수 있음
+
+~~~jsx
+// 실습 1
+import ChildComp from "./ChildComp"
+
+export default function ParentComp() {
+    return (
+        <>
+            <ChildComp alt="React" width={100}
+             height={100}/>
+        </>
+    )
+}
+// ----------------------------------------
+import reactLogo from '../assets/react.svg'
+
+
+
+export default function ChildComp({alt, width, height}) {
+  return (
+    <>
+      <img className="button-icon" src={reactLogo} alt={alt} 
+      width={width} height={height} />
+    </>
+  )
+}
+~~~
+
+~~~jsx
+// 실습2
+import ChildComp from "./ChildComp"
+import reactLogo from '../assets/react.svg'
+
+export default function ParentComp() {
+    return (
+        <>
+            <ChildComp 
+                imageInfo={
+                    {
+                        src: reactLogo,
+                        alt: "React",
+                    }
+                } 
+            width={100}
+            height={100}/>
+        </>
+    )
+}
+// ----------------------------------------
+export default function ChildComp({imageInfo, width, height}) {
+  return (
+    <>
+      <img className="button-icon" src={imageInfo.src} alt={imageInfo.alt} 
+      width={width} height={height} />
+    </>
+  )
+}
+~~~
+
+### Props의 기본값 지정
+
+- 부모 컴퐆넌트로부터 전달받은 prop이 없을 때는 기본값을 지정해 줄 수 있음
+- 지정할 때는 변수 뒤에 = 과 함께 기본값을 넣음
+
+~~~jsx
+// 실습
+export default function ChildComp({imageInfo, width=300, height}) {
+  return (
+    <>
+      <img className="button-icon" src={imageInfo.src} alt={imageInfo.alt} 
+      width={width} height={height} />
+    </>
+  )
+}
+// -------------------------------------
+import ChildComp from "./ChildComp"
+import reactLogo from '../assets/react.svg'
+import viteLogo from '../assets/vite.svg'
+
+export default function ParentComp() {
+    return (
+        <>
+            <ChildComp 
+                imageInfo={{
+                        src: reactLogo,
+                        alt: "React",
+                    }} 
+                />
+            <ChildComp 
+                imageInfo={{
+                        src: reactLogo,
+                        alt: "React",
+                    }} 
+            width={100}
+            height={100}/>
+            <ChildComp
+                imageInfo={{
+                        src: viteLogo,
+                        alt: "Vite",
+                    }}
+                width={200}
+                height={200}
+
+            />
+        </>
+    )
+}
+~~~
+
+### JSX spread 문법으로 props 전달하기
+- 모든 props를 한 번에 자식 컴포넌트에 전달하는 방법은 자바 스크립트의 spread 문법 이용
+- 전달받은 props 그대로 넘겨줄 때 : 부모 컴포넌트가 받은 props를 중간 단계 컴포넌트가 그대로 자식에게 토스할 때 매우 유용함
+
+~~~jsx
+// 실습
+import NameCard from "./NameCard"
+
+export default function SpreadComp() {
+    const userData = {
+        id: 1,
+        name: "Tom",
+        age: 25,
+        job: "Developer",
+        location: "Seoul",
+    }
+
+    return (
+        <>
+            <NameCard {...userData} />
+        </>
+    )
+}
+// -----------------------------------
+export default function NameCard({ ...userData }) {
+    return (
+        <div>
+            <h2>사용자 정보</h2>
+            <p>ID: {userData.id}</p>
+            <p>이름: {userData.name}</p>
+            <p>나이: {userData.age}</p>
+            <p>직업: {userData.job}</p>
+            <p>거주지: {userData.location}</p>
+        </div>
+    )
+}
+~~~
+
 # 3/25
 
 ### 2026/3/12 vite 업데이트
