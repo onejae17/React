@@ -1,6 +1,85 @@
+# 202230137 최원재
+
+# 4/8 (6주차)
+
+### 조건부로 JSX 반환하기 [실습]
+~~~jsx
+import Item from "./Item";
+
+export default function PackingList() {
+    return (
+        <section>
+            <h1>여행 준비 목록</h1>
+            <ul>
+                {/* <li>여분 옷</li>
+                <li>책</li>
+                <li>노트북</li> */}
+                <Item name="여분 옷" isPacked={true} />
+                <Item name="책" isPacked={true} />
+                <Item name="노트북" isPacked={true} />
+            </ul>
+        </section>
+    )
+}
+// ---------------------------------
+export default function Item({name, isPacked}) {
+    if (isPacked) {
+        return <li>{name} ✔</li>
+    }
+    return <li>{name}</li>
+}
+~~~
+
+### 중복된 코드 제거하기 [실습]
+~~~jsx
+// 실습 1
+export default function Item({name, isPacked}) {
+    return (
+        <li>
+            {isPacked ? (
+            <del>
+                {name + " ✔"}
+            </del>
+            ) : (
+                name
+            )}
+        </li>
+    )
+}
+// ------------------------------------------------
+// 실습 2
+
+export default function Item({name, isPacked}) {
+    let itemContent = name
+    if (isPacked) {
+        itemContent = <del>{name + " ✔"}</del>
+}
+    return (<li>{itemContent}</li>)
+
+}
+~~~
+
+### 논리 연산자 AND(&&) 사용하기
+
+~~~jsx
+export default function Item({name, isPacked}) {
+    return (
+        <li>
+            {name} {isPacked && "✔"}
+        </li>
+    )
+}
+~~~
+
+### 리스트 렌더링
+- 컴포넌트에서 여러 개의 데이터를 같은 형식으로 출력해야 하는 경우가 있다
+- 이럴 때는 JavaScript의 배열관련 함수를 사용해서, 배열을 컴포넌트의 기능에 맞게 렌더링할 수 있다.
+
+
+
 # 4/1
 
-### JSX로 마크업 작성하기
+### JSX로 마크업 작성하기 [실습]
 
 1. 따옴표로 문자열을 전달하는 방법
 2. 중괄호를 이용해서 JavaScript 변수를 참조하는 방법
@@ -24,7 +103,7 @@ export default function App() {
 }
 ~~~
 
-### 함수 사용 요일 추가
+### 함수 사용 요일 추가 [실습]
 
 ~~~jsx
 export default function UseJsx() {
