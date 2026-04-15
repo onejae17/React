@@ -159,7 +159,7 @@ export default function Kiosk() {
 }
 ~~~
 
-### 사이드 이펙트 [실습]
+### 사이드 이펙트(Side Effect): 의도하지 않은 결과 [실습]
 ~~~jsx
 let guest = 0;
 
