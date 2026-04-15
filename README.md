@@ -1,5 +1,200 @@
 # 202230137 최원재
 
+# 4/15 (7주차)
+
+### 배열의 항목들을 필터링하기 [실습]
+~~~jsx
+import {heroes} from './HeroesData'; 
+
+export default function MovieHeroes() {
+    const filterTest = heroes.filter(hero =>
+        hero.name === '피터 파커'
+    );
+    const listHeroes = filterTest.map(hero =>
+    <li>
+        <p>
+            {hero.name}의 배역은 {hero.casting}입니다
+        </p>
+    </li>
+    );
+    return (
+        <section>
+            <h1>영화 속 영웅들</h1>
+            <ul>
+                {listHeroes}
+            </ul>
+        </section>
+    );
+}
+// HeroesData --------------------------------------------
+export const heroes = [
+    {
+    id: 0,
+    casting: "스파이더맨",
+    name: "피터 파커",
+    },
+    {
+    id: 1,
+    casting: "아이언맨",
+    name: "토니 스타크",
+    },
+    {
+    id: 2,
+    casting: "배트맨",
+    name: "브루스 웨인",
+    },
+    {
+    id: 3,
+    casting: "슈퍼맨",
+    name: "클라크 켄트",
+    },
+    {
+    id: 4,
+    casting: "헐크",
+    name: "로버트 브루스 배너",
+    }
+]
+~~~
+
+### 복수 데이터 필터링 [실습]
+~~~jsx
+import {heroes} from './HeroesData'; 
+
+export default function MovieHeroes() {
+    const filterTest = heroes.filter(hero =>
+        hero.power === 3
+    );
+    const listHeroes = filterTest.map(hero =>
+    <li>
+        <p>
+            {hero.name}의 배역은 {hero.casting}입니다
+        </p>
+        <p>
+            {hero.name}의 파워는 {hero.power}입니다
+        </p>
+    </li>
+    );
+    return (
+        <section>
+            <h1>영화 속 영웅들</h1>
+            <ul>
+                {listHeroes}
+            </ul>
+        </section>
+    );
+}
+// ---------------------------------------------------
+export const heroes = [
+    {
+    id: 0,
+    casting: "스파이더맨",
+    name: "피터 파커",
+    power: 4,
+    },
+    {
+    id: 1,
+    casting: "아이언맨",
+    name: "토니 스타크",
+    power: 5,
+    },
+    {
+    id: 2,
+    casting: "배트맨",
+    name: "브루스 웨인",
+    power: 3,
+    },
+    {
+    id: 3,
+    casting: "슈퍼맨",
+    name: "클라크 켄트",
+    power: 5,
+    },
+    {
+    id: 4,
+    casting: "헐크",
+    name: "로버트 브루스 배너",
+    power: 4
+    }
+]
+~~~
+
+### key prop를 사용하는 이유
+- key prop은 배열 중 어떤 자식 요소인지 확인할 수 있도록 한다
+- key prop은 배열의 자식 요소가 정렬 등으로 인해 이동, 삽입 혹은 삭제되어도 각 자식 요소를 구별하는데 중요하게 사용됨
+- key prop은 즉석해서 생성하는 것이 아니고, 배열 안에 포함되어 있어야 함
+
+### 컴포넌트를 순수하게 유지하기
+- 순수 함수
+    - 같은 입력 값을 넣으면 항상 같은 결과를 반환하는 함수
+    - 외부의 상태를 변경하지 않는 즉, 사이드 이펙트(side effect)가 없는 함수를 의미함
+
+### 순수함수로 구현되는 컴포넌트 [실습]
+~~~jsx
+import OrderUp from "./OrderUp";
+
+export default function Kiosk() {
+  return (
+    <section>
+        <h2>치즈버거 세트 메뉴를 주문하세요</h2>
+        <p>일반 세트 : </p>
+      <OrderUp order={1} />
+        <p>패밀리 세트 : </p>
+      <OrderUp order={2} />
+    </section>
+  );
+}
+// ------------------------------------
+import OrderUp from "./OrderUp";
+
+export default function Kiosk() {
+  return (
+    <section>
+        <h2>치즈버거 세트 메뉴를 주문하세요</h2>
+        <p>일반 세트 : </p>
+      <OrderUp order={1} />
+        <p>패밀리 세트 : </p>
+      <OrderUp order={2} />
+    </section>
+  );
+}
+~~~
+
+### 사이드 이펙트 [실습]
+~~~jsx
+let guest = 0;
+
+function Cup() {
+  // 컴포넌트 외부의 guest 변수를 변경하고 있습니다. 🚨
+  guest = guest + 1;
+  return <h2>Tea cup for guest #{guest}</h2>;
+}
+
+export default function TeaSet() {
+  return (
+    <>
+      <Cup />
+      <Cup />
+      <Cup />
+    </>
+  );
+}
+// ------------------------------------
+function Cup({ guest }) {
+    // 컴포넌트 외부의 guest 변수를 변경하고 있습니다. 🚨
+  return <h2>Tea cup for guest #{guest}</h2>;
+}
+
+export default function TeaSet() {
+  return (
+    <>
+      <Cup guest={1} />
+      <Cup guest={2} />
+      <Cup guest={3} />
+    </>
+  );
+}
+~~~
+
 # 4/8 (6주차)
 
 ### 조건부로 JSX 반환하기 [실습]
@@ -86,7 +281,6 @@ export default function Item({name, isPacked}) {
 3. 중괄호를 이용해서 JavaScript 함수를 호출하는 방법
 4. 중괄호를 이용해서 JavaScript 객체를 적용하는 방법
 
-- 
 ~~~jsx
 import NamedComponentTest from './components/NamedComponentTest'
 import Gallery from './components/Profile'
