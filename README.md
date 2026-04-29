@@ -1,5 +1,140 @@
 # 202230137 최원재
 
+# 4/29 (9주차)
+
+### UI를 트리 구조로 이해하기 - Render 트리
+
+- 예제를 분석하고 Render 트리를 구성할 때는 컴포넌트의 부모, 자식관계 즉 호출한 곳이 어디인가를 확인함
+- 트리는 노드로 구성되어 있으며, 각 노드는 컴포넌트를 나타냄
+- App, FancyText, Copyright 등은 모두 트리의 노드임
+- React Render 트리에서 루트 노드는 앱의 Root 컴포넌트임
+- 이 경우 루트 컴포넌트는 App이며 React가 렌더링하는 첫 번째 컴포넌트임
+- 트리의 각 화살표는 부모 컴포넌트에서 자식 컴포넌트를 가리킴
+- DOM 트리와는 달리 Render 트리는 HTML 태그 없이 React 컴포넌트로만 구성됨
+
+###  UI를 트리 구조로 이해하기 – 모듈 의존성 트리
+
+- 모듈 의존성 트리는 React의 또다른 트리 구조 모델링 방법으로 모듈의 종속성을 나타냄
+- 컴포넌트와 로직을 별도의 파일로 분리하면 컴포넌트 뿐만 아니라 함수 또는 상수를 export할 수 있는 JS 모듈을 만들 수 있음
+- 모듈 의존성 트리의 각 노드는 모듈이며, 가지는 해당 모듈의 import 문을 나타냄
+- 트리의 루트 노드는 루트 모듈이며, 엔트리 포인트 파일이라고도 함
+- Render 트리 비교 차이점
+    1. 트리를 구성하는 노드는 컴포넌트가 아닌 모듈을 나타냄
+    2. inspiration.js와 같은 컴포넌트가 아닌 모듈도 이 트리에 나타남
+    3. Render 트리는 컴포넌트만 캡슐화 하지만 모듈 트리는 모듈도 포함함 (컴포넌트 + 모듈)
+- 일반적으로 앱이 커짐에 따라 번들 크기도 커짐
+- 번들 크기가 그려지는 데 시간이 지체될 수 있음
+- 또한 UI가 그려지는 데 시간이 지체될 수 있음
+
+### jsx에 스타일 적용하기
+
+- jsx에 스타일 적용하는 방법은 매우 다양 : 일반 CSS, 인라인 CSS, CSS-in-JS, CSS 프레임워크, css Module
+- React에 권장하는 방법은 CSS Module
+
+### 일반 CSS
+
+- 가장 간단하게 사용할 수 있는 방법으로 HTML에서 CSS를 사용하는 방법과 동일함
+- style.css 파일을 만들어서 필요한 스타일을 정의한 후에 사용할 컴포넌트에서 import한 후 사용함
+- 단, 속성의 이름으로 class가 아닌 className을 사용합니다. 이 것은 앞에서 소개한 모든 방법에서 동일하게 적용됨
+- 익숙한 방법이기 때문에 프로젝트에 빠르게 적용할 수 있다는 장점을 가지고 있음
+- 컴포넌트 단위로 관리하기가 어렵고, 전역 스코프(global)의 클래스 이름과 충돌 가능성이 있기 때문에 주의해야 함
+
+### 인라인 스타일
+- HTML에서도 인라인 스타일은 유지보수의 어려움 등의 단점이 있어서 자주 사용하는 방법은 아님
+- 조건부 스타일에서만 제한적으로 사용됨
+- 속성 이름은 kebab-case가 아닌 camelCase를 사용해야 함
+
+### CSS-in-JS
+
+- 자바스크립트 코드 내에서 CSS를 직접 작성하여, 컴포넌트 단위로 스타일을 관리하는 방법임
+- styled-components, emotion, JSS 등 외부 라이브러리를 사용함
+
+- 장점
+    - 스타일이 컴포넌트 내에 바인딩되기 때문에 관리와 유지보수가 용이함
+    - props를 기반으로 한 동적(조건부) 스타일링 적용에 매우 편리함
+    - 고유한 클래스명을 자동으로 생성하여 스타일의 충돌을 방지함
+    - Provider 컴포넌트를 통해 전역 테마 설정을 쉽게 적용할 수 있음
+
+- 단점
+    - 스타일을 문자열로 변환하여 삽입하는 과정에서 런타임 성능의 저하가 발생할 수 있음
+    - 라이브러리 추가로 인한 자바스크립트 번들 사이즈가 커짐
+    - 기존 CSS/SCSS와 다른 각 라이브러리 고유의 문법을 학습해야 함
+
+### CSS Mudule
+
+- CSS Module은 클래스명을 [클래스이름]_[해쉬값]의 형태로 자동 변환하여, 고유한 이름의 로컬 스코프(Local Scope)를 제공하는 기술
+- 컴포넌트 기반의 프레임워크인 React나 Vue 등에서 채택하고 있는 이 기술은 스타일의 충동을 완벽하게 방지할 뿐만 아니라 유지보수에도 유리함
+- 컴포넌트 단위로 스타일링 한다는 것이 가장 큰 특징으로 컴포넌트의 재사용에도 유라하게 작용함
+- 일반 CSS의 문제점 중 하나는 전역으로 선언되기 떄문애 다른 컴포넌트와 충돌의 위험이 있는 것
+
+### CSS Module 사용 방법
+
+- 파일 이름의 규칙 : 파일 이름은[커모넌트 이름].module.css의 형태로 확장자는 반드시.module.css로 함
+- css 작성 :
+    - CSS의 내용은 일반 CSS의 작성법을 따르고
+    - class 선택자로 스타일을 선언
+    - Tag 선택자를 사용하는 것은 특별한 경우가 아니라면 권장하지 않음
+    - Tag 선택자는 CSS Module 빌드 시에 고유한 이름을 할당 받지 않고, 전역으로 사용되기 때문
+
+### 실습
+~~~jsx
+import style from "./ButtonCom.module.css"
+
+export default function ButtonCom() {
+    return (
+        <>  
+            <h1 className={style.title}>ButtonCom 컴포넌트</h1>
+            <nav className={style.navBar}>
+                <button>버튼1</button>
+                <button>버튼2</button>
+            </nav>
+        </>
+        
+    )
+}
+-------------------------------------------
+.title {
+    color: salmon;
+    text-align: center;
+}
+.navBar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+~~~
+
+### 이벤트에 응답하기
+- React에서는 JSX에 이벤트 핸들러를 추가할 수 있음
+- 이벤트 핸들러는 클릭, 마우스 호버(hover), 폼 입력의 포커스 등 사용자와의 상호작용에 따라 유발되는 사용자 정의함수임
+
+### 이벤트 핸들러 추가하기 [실습]
+
+~~~jsx
+import style from "./ButtonCom.module.css"
+
+export default function ButtonCom() {
+    function handleClick() {
+        alert("버튼 클릭")
+    }
+
+    return (
+        <>  
+            <h1 className={style.title}>ButtonCom 컴포넌트</h1>
+            <nav className={style.navBar}>
+                <button onClick={handleClick} className={style.myButton}>
+                    버튼1
+                </button>
+                <button onClick={handleClick} className={style.myButton}>
+                    버튼2
+                </button>
+            </nav>
+        </>
+        
+    )
+}
+~~~
+
 # 4/15 (7주차)
 
 ### 배열의 항목들을 필터링하기 [실습]
