@@ -1,5 +1,124 @@
 # 202230137 최원재
 
+# 5/6 (10주차)
+
+# 이벤트 핸들러에서 Prop 사용 [실습]
+~~~jsx
+import ButtonCom from "./ButtonCom/ButtonCom"
+
+export default function Toolbar() {
+    return (
+        <>
+            <ButtonCom message="버튼 1">
+                버튼1
+            </ButtonCom>
+            <ButtonCom message="버튼 2">
+                버튼2
+            </ButtonCom>
+        </>
+    )
+}
+-----------------------------------------------------------
+import style from "./ButtonCom.module.css"
+
+export default function ButtonCom({ message, children }) {
+    function handleClick() {
+        alert(message)
+    }
+
+    return (
+        <>  
+            <button onClick={handleClick} className={style.myButton}>
+                {children}
+            </button>
+
+        </>
+        
+    )
+}
+~~~
+
+### 이벤트 핸들러를 Prop으로 전달하기 [실습]
+- 구현 방법
+    - 조건문을 사용하여 분기하면 쉽게 구현할 수 있다
+    - 필요한 만큼 Button 컴포넌트를 만들 수도 있다
+- 관리와 재사용이 편리한 방법
+    - Button 컴포넌트는 버튼의 출력만 담당
+    - 이벤트 핸들러는 별도의 파일에 모듈의 형태로 모아서 관리
+    - 부모 컴포넌트에서 Button 컴포넌트를 호출할 때 이벤트 핸들러를 함께 전달
+~~~jsx
+export default function ButtonCom({ handle, message, children, className }) {
+    return (
+        <>
+            <button onClick={() => handle(message)} className={className}>
+                {children}
+            </button>
+        </>
+    )
+}
+-----------------------------------------------------
+import { handleClick } from "./handle.jsx"
+import ButtonCom from "./ButtonCom.jsx"
+import style from "./ButtonCom.module.css"
+
+export default function ToolBar() {
+    return (
+        <>
+            <ButtonCom message="버튼 1" handle={handleClick} className={style.myButton}>
+                버튼1
+            </ButtonCom>
+            <ButtonCom message="버튼 2" handle={handleClick} className={style.myButton}>
+                버튼2
+            </ButtonCom>
+        </>
+    )
+}
+----------------------------------------------------
+export function handleClick(message) {
+    alert(message)
+}
+~~~
+### 영상을 재생하는 handlePlay 이벤트 핸들러 [실습]
+~~~jsx
+export function handleClick(message) {
+    alert(message)
+}
+
+export function handlePlay(message) {
+    const videoSource = document.getElementById(message)
+    if (videoSource) videoSource.play()
+}
+
+export function handleStop(message) {
+    const videoSource = document.getElementById(message)
+    if (videoSource) videoSource.pause()
+}
+------------------------------------------------------
+import { handlePlay, handleStop } from "./handle.jsx"
+import ButtonCom from "./ButtonCom.jsx"
+import style from "./ButtonCom.module.css"
+import sampleVideo from "../../assets/348057_tiny.mp4"
+
+export default function ToolBar() {
+    return (
+        <>
+            <nav>
+                <ButtonCom message="videoPlayer" handle={handlePlay} className={style.myButton}>
+                    Play
+                </ButtonCom>
+                <ButtonCom message="videoPlayer" handle={handleStop} className={style.myButton}>
+                    Stop
+                </ButtonCom>
+            </nav>
+        <br/>
+        <section>
+            <video id="videoPlayer" src={sampleVideo} controls width="350"></video>
+        </section>
+        </>
+    )
+}
+~~~
+
 # 4/29 (9주차)
 
 ### UI를 트리 구조로 이해하기 - Render 트리
