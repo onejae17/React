@@ -1,8 +1,89 @@
 # 202230137 최원재
 
+# 5/13 (11주차)
+
+### 이벤트의 전파 [실습]
+~~~jsx
+import style from "./ButtonCom/Bubble.module.css"
+
+
+export default function Bubble() {
+  return (
+    <>
+    <h1 className={style.title}>Bubble</h1>
+    <nav className={style.navBar} onClick={() => alert("메뉴바 클릭!")}>
+      <button className={style.button} onClick={() => alert("버튼1 클릭!")}>
+        버튼1
+      </button>
+      <button className={style.button} onClick={() => alert("버튼2 클릭!")}>
+        버튼2
+      </button>
+    </nav>
+    </>
+  );
+}
+~~~
+
+### 이벤트 전파의 중지 [실습]
+~~~jsx
+import style from "./ButtonCom/Bubble.module.css"
+
+function Button({ onClick, children }) {
+    return (
+        <button onClick={e => {
+            e.stopPropagation();
+            onClick();
+        }}>
+            {children}
+        </button>
+    )
+}
+
+export default function Bubble() {
+  return (
+    <>
+    <h1 className={style.title}>Bubble</h1>
+    <nav className={style.navBar} onClick={() => alert("네비게이션 클릭!")}>
+      <Button onClick={() => alert("버튼1 클릭!")}>
+        버튼1
+      </Button>
+      <Button onClick={() => alert("버튼2 클릭!")}>
+        버튼2
+      </Button>
+    </nav>
+    </>
+  );
+}
+~~~
+
+### e.stopPropagation()와 e.preventDefault()
+- e.stopPropagation()와 e.preventDefault()를 혼동하지 말아야 함
+- 전파를 중지하는 데는 둘 다 유용하지만, 전혀 다른 기능을 가지고 있음
+- e.stopPropagation()은 이벤트 핸들러가 상위 태그에서 실행되지 않도록 멈추는 기능을 함
+- 반면 e.preventDefault()는 브라우저 기본 동작을 갖고 있는 일부 이벤트가 해당 기본 동작을 실행하지 않도록 방지하는 기능을 함
+
+### State의 개념과 useState
+
+- State는 컴포넌트의 기억장소
+
+- 컴포넌트는 상호 작용의 결과로 화면의 내용을 변경해야 하는 경우가 많다
+- 예를 들면
+    - 폼에 무언가를 입력하면 입력 필드가 업데이트되어야 하고,
+    - 이미지 캐러셀에서 다음 버튼을 클릭할 때 표시되는 이미지가 변경되어야 한다
+    - 또한 구매 버튼을 클릭하면 상품이 장바구니에 담겨야 하는 경우도 있다
+- 컴포넌트는 현재 입력 값, 현재 이미지, 장바구니의 상태와 같은 것들을 어디 가에 “기억”해야 한다
+- React는 이런 종류의 컴포넌트별 메모리를 state라고 부름
+
+### 로컬 변수에 컴포넌트 상태 저장 
+- 로컬 이미지를 호출하려면 각각의 이미지를 import해야 함
+    - 그런데 이미지가 많은 경우는 이미지를 사용하는 컴포넌트는 코드가 복잡해짐
+- 해결 방법 -
+    - index 파일을 만들어서 이미지를 한곳에서 전부 처리
+        - 로컬 변수명을 모두 export해도 되지만, 로컬 변수명을 하나의 객체로 묶어서 export하면 사용하기에 편함
+
 # 5/6 (10주차)
 
-# 이벤트 핸들러에서 Prop 사용 [실습]
+### 이벤트 핸들러에서 Prop 사용 [실습]
 ~~~jsx
 import ButtonCom from "./ButtonCom/ButtonCom"
 
@@ -78,6 +159,7 @@ export function handleClick(message) {
     alert(message)
 }
 ~~~
+
 ### 영상을 재생하는 handlePlay 이벤트 핸들러 [실습]
 ~~~jsx
 export function handleClick(message) {
