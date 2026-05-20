@@ -1,5 +1,161 @@
 # 202230137 최원재
 
+# 5/20 (12주차)
+
+### 로컬 변수에 컴포넌트 상태 저장[실습]
+- 지역 변수는 렌더링과 렌더링 사이의 변화가 유지되지 않습니다
+- React는 이 컴포넌트를 두 번째로 렌더링할 때 지역 변수에 대한 변경 사항은 고려하지 않고 다시 처음부터 렌더링 합니다.
+- 버튼 클릭으로 index가 1로 변경되어도, React는 index의 초기값 0을 적용하기 때문에 화면에는 아무런 변화가 없습니다.
+
+~~~jsx
+import {slide} from "./images"
+
+export const galleryImages = [
+    {
+        name: "slide 1",
+        artist: "Artist 1",
+        description: "placeholder image for slide 1",
+        url: "https://placehold.co/600x400?text=Slide1",
+        alt: "Slide 1",
+    },
+    {
+        name: "slide 2",
+        artist: "Artist 2",
+        description: "placeholder image for slide 2",
+        url: "https://placehold.co/600x400?text=Slide2",
+        alt: "Slide 2",
+    },
+    {
+        name: "slide 3",
+        artist: "Artist 3",
+        description: "placeholder image for slide 3",
+        url: "https://placehold.co/600x400?text=Slide3",
+        alt: "Slide 3",
+    },
+    {
+        name: "slide 4",
+        artist: "Artist 4",
+        description: "placeholder image for slide 4",
+        url: "https://placehold.co/600x400?text=Slide4",
+        alt: "Slide 4",
+    },
+    {
+        name: "slide 5",
+        artist: "Artist 1",
+        description: "placeholder image for slide 5",
+        url: "https://placehold.co/600x400?text=Slide5",
+        alt: "Slide 5",
+    }
+]
+-----------------------------------------------
+import { galleryImages  } from "./imgData";
+
+export default function Carousel() {
+    let index = 0;
+
+    function handleClick() {
+        index = index + 1;
+        console.log(index);
+    }
+
+    let slide = galleryImages[index];
+    return (
+        <>
+            <button onClick={handleClick}>Next</button>
+            <h2>
+                <i>{slide.name}</i>
+                by {slide.artist}
+            </h2>
+            <h3>
+                ({index + 1} of {galleryImages.length})
+            </h3>
+            <img src={slide.url} alt={slide.alt} />
+            <p>{slide.description}</p> 
+        </>
+    )
+}
+~~~
+### state Hook에 컴포넌트 상태 저장하기
+- React에서는 현재의 상태를 보관할 수 있는 메모리를 제공함 바로 State Hook
+- State Hook을 사용하려면 React에서 useState를 import 해야 함
+- Setter 함수의 이름은 일반적으로 변수 이름 앞에 set을 붙인 함수명을 사용
+~~~jsx
+import { useState } from "react";
+import { galleryImages  } from "./imgData";
+
+export default function Carousel() {
+    const [index, setIndex] = useState(0);
+
+    function handleClick() {
+        setIndex(index + 1);
+        console.log(index);
+    }
+
+    let slide = galleryImages[index];
+    return (
+        <>
+            <button onClick={handleClick}>Next</button>
+            <h2>
+                <i>{slide.name}</i>
+                by {slide.artist}
+            </h2>
+            <h3>
+                ({index + 1} of {galleryImages.length})
+            </h3>
+            <img src={slide.url} alt={slide.alt} />
+            <p>{slide.description}</p> 
+        </>
+    )
+}
+~~~
+### 완성
+~~~jsx
+import { useState } from "react";
+import { galleryImages } from "./imgData";
+
+export default function Carousel() {
+  const [index, setIndex] = useState(0);
+
+  function handleNext() {
+    if (index === galleryImages.length - 1) {
+      setIndex(0);
+    } else {
+        setIndex(index + 1);
+        console.log(index);
+    }
+  }
+
+  function handlePrevious() {
+    if (index === 0) {
+      setIndex(galleryImages.length - 1);
+    } else {
+        setIndex(index - 1);
+        console.log(index);
+    }
+  }
+
+  const slide = galleryImages[index];
+
+  return (
+    <>
+      <button onClick={handleNext}>Next</button>
+      <button onClick={handlePrevious}>Previous</button>
+      
+      <h2>
+        <i>{slide.name}</i> by {slide.artist}
+      </h2>
+
+      <h3>
+        ({index + 1} of {galleryImages.length})
+      </h3>
+
+      <img src={slide.url} alt={slide.alt} />
+      <p>{slide.description}</p>
+    </>
+  );
+}
+~~~
+
 # 5/13 (11주차)
 
 ### 이벤트의 전파 [실습]
