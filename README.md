@@ -1,5 +1,105 @@
 # 202230137 최원재
 
+# 6/5 (14주차)
+
+### state 작용 [실습]
+
+~~~jsx
+import { useState } from 'react';
+
+export default function BtnClick() {
+  const [number, setNumber] = useState(0);
+
+  function handleIncrease3() {
+        setNumber(number + 1);
+        console.log(number);
+        setNumber(number + 1);
+        console.log(number);
+        setNumber(number + 1);
+        console.log(number);
+    }
+
+  function handleIncrease5 () {
+    setNumber(number + 5);
+    alert(number);
+  }
+
+  function handleTimer () {
+    setNumber(number + 5);
+    setTimeout(() => {
+      alert(number);
+    }, 1000);
+  }
+
+  return (
+    <>
+      <h1>{number}</h1>
+      <button onClick={handleIncrease3}>+3</button>&nbsp;
+      <button onClick={handleIncrease5}>+5</button>&nbsp;
+      <button onClick={handleTimer}>Timer</button>
+    </>
+  )
+}
+~~~
+- React에 저장된 state는 alert창이 실행될 때 변경될 수 있다.
+- 그러나 사용자가 상호작용한 시점에 이전에 저장되어 있던 state 스냅샷을 사용함
+- 이벤트 핸들러의 코드가 비동기식이라도 렌더링하는 동안 state 변수 값은 절대 변경되지 않음
+
+### React state 업데이트의 배치처리
+- set 함수로 state 변수를 저장하면 새로운 렌더링이 큐에 들어감
+- 그러나 경우에 따라서는 렌더링을 큐에 넣기 전에, state 변수 값에 몇 가지 작업을 수행하고 싶을 때도 있습니다.
+- 이런 경우를 대비해서 React가 state 업데이트를 어떻게 배치처리 하는지를 이해하는 것이 도움이 됨
+- React는 이벤트 핸들러의 모든 코드가 실행될 때까지 state를 업데이트 하지 않고 대기함
+- 호출이 완료된 이후에만 리렌더링이 일어남
+- 이 프로세스를 배칭(batching)이라고 함
+
+### 큐에서 하나 전의 state로, 다음 state를 계사하는 컴포넌트 제작[실습]
+~~~jsx
+import { useState } from 'react';
+
+export default function BtnClick() {
+  const [number, setNumber] = useState(0);
+
+  function handleIncrease3() {
+        setNumber(n => n + 1);
+        console.log(number);
+        setNumber(n => n + 1);
+        console.log(number);
+        setNumber(n => n + 1);
+        console.log(number);
+    }
+
+  function handleIncrease5 () {
+    setNumber(number + 5);
+    alert(number);
+  }
+
+  function handleTimer () {
+    setNumber(number + 5);
+    setTimeout(() => {
+      alert(number);
+    }, 1000);
+  }
+
+  return (
+    <>
+      <h1>{number}</h1>
+      <button onClick={handleIncrease3}>+3</button>&nbsp;
+      <button onClick={handleIncrease5}>+5</button>&nbsp;
+      <button onClick={handleTimer}>Timer</button>
+    </>
+  )
+}
+~~~
+
+### [Note] 화살표 함수의 축약
+- setNumber(n => n + 1)의 n => n + 1는 화살표 함수가 축약된 표현임
+- 화살표 함수 전체를 표시하면 (n) => {return n + 1;}와 같이 작성되는 것
+- 매개변수가 하나면 소괄호() 생략 가능
+
+### Github Pages
+- new repository -> (githubID).github.io -> Create repository -> #.html -> 프로젝트 파일로 들어간 후 git clone 주소 입력 
+
 # 5/20 (12주차)
 
 ### 로컬 변수에 컴포넌트 상태 저장[실습]
